@@ -1,0 +1,37 @@
+[project]
+name = "tsa_two"
+version = "1.0.0"
+authors = [
+  { name="Dawid Kulikowski", email="cern_assignment@dawii.xyz" },
+]
+description = "Answer to CERN Technical Student Q2"
+readme = "README.md"
+requires-python = ">=3.12"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.scripts]
+tsa_two-cli = "tsa_two.cli:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.pytest.ini_options]
+pythonpath = "src"
+
+[tool.isort]
+profile = "black"
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "pytest-cov",
+    "black",
+    "isort",
+    "flake8",
+    "pre-commit"
+]

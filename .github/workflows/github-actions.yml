@@ -1,0 +1,58 @@
+name: Code-quality check and tests
+on:
+  push:
+    branches:
+      - 'main'
+  pull_request:
+jobs:
+  lint-black:
+    runs-on: ubuntu-22.04
+    name: Lint with Black
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - uses: psf/black@stable
+      with:
+        options: "--check --verbose"
+        version: "~= 24.8"
+  lint-isort:
+    runs-on: ubuntu-22.04
+    name: Lint with isort
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: 3.12
+      - uses: isort/isort-action@master
+  lint-flake8:
+    runs-on: ubuntu-22.04
+    name: Lint with flake8
+    steps:
+      - name: Check out source repository
+        uses: actions/checkout@v4
+      - name: Set up Python environment
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: flake8 Lint
+        uses: py-actions/flake8@v2
+  test-pytest:
+    runs-on: ubuntu-22.04
+    name: Run pytest tests
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
+    - name: Test with pytest
+      run: |
+        pip install --upgrade pip
+        pip install pytest pytest-cov
+        pytest --doctest-modules --cov-fail-under=80 --junitxml=junit/test-results.xml --cov=src --cov-report=xml --cov-report=html
+    - name: Upload pytest test results
+      uses: actions/upload-artifact@v4
+      with:
+        name: pytest-results
+        path: junit/test-results.xml
+      if: ${{ always() }}

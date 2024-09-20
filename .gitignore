@@ -1,0 +1,7 @@
+__pycache__
+build/
+.pytest_cache
+htmlcov
+junit
+.coverage
+coverage.xml
